@@ -1,10 +1,18 @@
-"""Flask application entry point for Vercel serverless deployment."""
 import os
+import sys
 import json
-from flask import Flask, render_template, request, jsonify
-from api.calculator import calculate_comparison
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
+from flask import Flask, render_template, request, jsonify
+
+try:
+    from api.calculator import calculate_comparison
+except ModuleNotFoundError:
+    from calculator import calculate_comparison
+
 TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 
