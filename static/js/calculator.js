@@ -230,27 +230,29 @@ if (typeof window !== "undefined") {
     const formattedDelta = formatCurrency(absDelta);
 
     if (result.winner === "buy") {
-      verdictBanner.className = "p-6 rounded-2xl border transition-all duration-300 bg-emerald-950/30 border-emerald-500/30 text-emerald-100 shadow-lg shadow-emerald-950/20";
-      verdictTitle.innerHTML = `<span class="inline-flex items-center gap-2"><svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg> Buying Wins</span>`;
+      verdictBanner.className = "p-5 sm:p-6 rounded-xl border transition-all duration-200 bg-emerald-50/80 border-emerald-300 dark:bg-[#0d131f] dark:border-emerald-500/40 text-slate-900 dark:text-slate-100 shadow-sm dark:shadow-none";
+      verdictTitle.innerHTML = `<span class="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider font-semibold text-emerald-700 dark:text-emerald-400"><svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg> Homeownership Wins</span>`;
       verdictAmount.textContent = `+${formattedDelta}`;
-      verdictAmount.className = "text-4xl font-extrabold tracking-tight text-emerald-400";
-      verdictDesc.textContent = `Homeowner net worth exceeds renter portfolio by ${formattedDelta} at Year ${horizonYears}.`;
+      verdictAmount.className = "text-3xl sm:text-4xl lg:text-5xl font-extrabold font-mono tracking-tight text-emerald-600 dark:text-emerald-400 tabular-nums mt-1";
+      verdictDesc.textContent = `Liquidated home equity exceeds renter portfolio by ${formattedDelta} at Year ${horizonYears}.`;
+      verdictDesc.className = "text-xs sm:text-sm text-slate-700 dark:text-slate-300 mt-2.5 leading-relaxed";
     } else {
-      verdictBanner.className = "p-6 rounded-2xl border transition-all duration-300 bg-indigo-950/30 border-indigo-500/30 text-indigo-100 shadow-lg shadow-indigo-950/20";
-      verdictTitle.innerHTML = `<span class="inline-flex items-center gap-2"><svg class="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg> Renting & Investing Wins</span>`;
+      verdictBanner.className = "p-5 sm:p-6 rounded-xl border transition-all duration-200 bg-blue-50/80 border-blue-300 dark:bg-[#0d131f] dark:border-blue-500/40 text-slate-900 dark:text-slate-100 shadow-sm dark:shadow-none";
+      verdictTitle.innerHTML = `<span class="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider font-semibold text-blue-700 dark:text-blue-400"><svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg> Rent & Invest Wins</span>`;
       verdictAmount.textContent = `+${formattedDelta}`;
-      verdictAmount.className = "text-4xl font-extrabold tracking-tight text-indigo-400";
+      verdictAmount.className = "text-3xl sm:text-4xl lg:text-5xl font-extrabold font-mono tracking-tight text-blue-600 dark:text-blue-400 tabular-nums mt-1";
       verdictDesc.textContent = `S&P 500 portfolio outpaces home equity by ${formattedDelta} at Year ${horizonYears}.`;
+      verdictDesc.className = "text-xs sm:text-sm text-slate-700 dark:text-slate-300 mt-2.5 leading-relaxed";
     }
 
     if (result.crossoverYear) {
-      crossoverBadge.innerHTML = `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 border border-amber-500/30 text-amber-300">
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+      crossoverBadge.innerHTML = `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-amber-300 bg-amber-100/90 text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300 font-mono text-xs font-medium">
+        <svg class="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
         Crossover in Year ${result.crossoverYear}
       </span>`;
     } else {
       const leaderName = result.winner === "buy" ? "Buying" : "Renting";
-      crossoverBadge.innerHTML = `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-slate-800 text-slate-400 border border-slate-700">
+      crossoverBadge.innerHTML = `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700">
         No crossover (${leaderName} leads throughout)
       </span>`;
     }
@@ -272,21 +274,21 @@ if (typeof window !== "undefined") {
       const buyLead = m.delta >= 0;
       const diffFormatted = formatCurrency(Math.abs(m.delta));
       html += `
-        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-slate-700 transition-colors">
+        <div class="bg-white dark:bg-[#0d131f] border border-slate-200 dark:border-slate-800 rounded-lg p-3 sm:p-3.5 flex flex-col justify-between hover:border-slate-300 dark:hover:border-slate-700 transition-colors shadow-sm dark:shadow-none">
           <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Year ${yr}</span>
-            <span class="text-xs px-2 py-0.5 rounded font-medium ${buyLead ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "bg-indigo-500/10 text-indigo-400 border border-indigo-500/20"}">
+            <span class="text-[11px] font-mono font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">Year ${yr}</span>
+            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded font-medium ${buyLead ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30" : "bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/30"}">
               ${buyLead ? "Buy" : "Rent"} +${diffFormatted}
             </span>
           </div>
-          <div class="space-y-1.5 text-xs text-slate-300">
+          <div class="space-y-1 font-mono text-xs tabular-nums">
             <div class="flex justify-between">
-              <span class="text-slate-400">Home Equity:</span>
-              <span class="font-medium text-slate-200">${formatCurrency(m.buyNetWorth)}</span>
+              <span class="text-slate-500 dark:text-slate-400 text-[11px]">Home:</span>
+              <span class="text-slate-900 dark:text-slate-200 font-semibold">${formatCurrency(m.buyNetWorth)}</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-slate-400">S&P Portfolio:</span>
-              <span class="font-medium text-slate-200">${formatCurrency(m.rentNetWorth)}</span>
+              <span class="text-slate-500 dark:text-slate-400 text-[11px]">S&P:</span>
+              <span class="text-slate-900 dark:text-slate-200 font-semibold">${formatCurrency(m.rentNetWorth)}</span>
             </div>
           </div>
         </div>
@@ -295,11 +297,72 @@ if (typeof window !== "undefined") {
     container.innerHTML = html;
   }
 
+  function updateBreakdown(result, params) {
+    const outlayEl = document.getElementById("breakdown-outlay");
+    const outlaySubEl = document.getElementById("breakdown-outlay-sub");
+    const monthlyEl = document.getElementById("breakdown-monthly");
+    const monthlySubEl = document.getElementById("breakdown-monthly-sub");
+    const exitEl = document.getElementById("breakdown-exit");
+    const exitSubEl = document.getElementById("breakdown-exit-sub");
+
+    if (!outlayEl) return;
+
+    // Upfront Outlay
+    const totalOutlay = result.initialCosts.initialPortfolio;
+    outlayEl.textContent = formatCurrency(totalOutlay);
+    if (outlaySubEl) {
+      outlaySubEl.textContent = `${formatCurrency(result.initialCosts.downPayment)} down + ${formatCurrency(result.initialCosts.buyerClosingCosts)} closing fees`;
+    }
+
+    // Monthly housing cost year 1
+    const homePrice = Number(params.homePrice) || 450000;
+    const monthlyHolding = (homePrice * (ANNUAL_PROPERTY_TAX_INSURANCE + ANNUAL_MAINTENANCE)) / 12.0;
+    const totalMonthlyBuy = result.initialCosts.monthlyMortgagePi + monthlyHolding;
+    const monthlyRent = Number(params.initialRent) || 2200;
+    if (monthlyEl) {
+      monthlyEl.textContent = `${formatCurrency(totalMonthlyBuy)}/mo vs ${formatCurrency(monthlyRent)}/mo`;
+    }
+    if (monthlySubEl) {
+      const diff = totalMonthlyBuy - monthlyRent;
+      if (diff > 0) {
+        monthlySubEl.textContent = `Renting saves ${formatCurrency(diff)}/mo invested in S&P`;
+      } else {
+        monthlySubEl.textContent = `Buying saves ${formatCurrency(Math.abs(diff))}/mo over rent`;
+      }
+    }
+
+    // Exit friction fee at horizon
+    const horizonYearData = result.yearlyData[result.yearlyData.length - 1];
+    if (horizonYearData && exitEl) {
+      const exitFee = horizonYearData.homeValue * SELLER_CLOSING_FEE_PCT;
+      exitEl.textContent = formatCurrency(exitFee);
+      if (exitSubEl) {
+        exitSubEl.textContent = `6.0% fee on ${formatCurrency(horizonYearData.homeValue)} home at Yr ${params.horizonYears}`;
+      }
+    }
+  }
+
+  function updateChartTheme(isDark) {
+    if (!chartInstance) return;
+    const gridColor = isDark ? "rgba(30, 41, 59, 0.5)" : "rgba(226, 232, 240, 0.9)";
+    const tickColor = "#64748b";
+    const tooltipBg = isDark ? "#0d131f" : "#0f172a";
+    const tooltipBorder = isDark ? "#1e293b" : "#e2e8f0";
+
+    chartInstance.options.scales.x.grid.color = gridColor;
+    chartInstance.options.scales.y.grid.color = gridColor;
+    chartInstance.options.scales.x.ticks.color = tickColor;
+    chartInstance.options.scales.y.ticks.color = tickColor;
+    chartInstance.options.plugins.tooltip.backgroundColor = tooltipBg;
+    chartInstance.options.plugins.tooltip.borderColor = tooltipBorder;
+    chartInstance.update("none");
+  }
+
   function updateChart(result) {
     const ctx = document.getElementById("trajectory-chart");
     if (!ctx) return;
 
-    const labels = result.yearlyData.map((d) => `Yr ${d.year}`);
+    const labels = result.yearlyData.map((d) => `Y${d.year}`);
     const buyData = result.yearlyData.map((d) => d.buyNetWorth);
     const rentData = result.yearlyData.map((d) => d.rentNetWorth);
 
@@ -313,6 +376,11 @@ if (typeof window !== "undefined") {
 
     if (typeof Chart === "undefined") return;
 
+    const isDark = document.documentElement.classList.contains("dark");
+    const gridColor = isDark ? "rgba(30, 41, 59, 0.5)" : "rgba(226, 232, 240, 0.9)";
+    const tooltipBg = isDark ? "#0d131f" : "#0f172a";
+    const tooltipBorder = isDark ? "#1e293b" : "#e2e8f0";
+
     chartInstance = new Chart(ctx, {
       type: "line",
       data: {
@@ -322,25 +390,25 @@ if (typeof window !== "undefined") {
             label: "Home Equity (Net Exit)",
             data: buyData,
             borderColor: "#10b981",
-            backgroundColor: "rgba(16, 185, 129, 0.08)",
-            borderWidth: 2.5,
+            backgroundColor: "rgba(16, 185, 129, 0.04)",
+            borderWidth: 2,
             fill: true,
-            tension: 0.25,
-            pointRadius: 2,
-            pointHoverRadius: 6,
+            tension: 0.1,
+            pointRadius: 0,
+            pointHoverRadius: 5,
             pointBackgroundColor: "#10b981",
           },
           {
             label: "S&P 500 Portfolio",
             data: rentData,
-            borderColor: "#6366f1",
-            backgroundColor: "rgba(99, 102, 241, 0.08)",
-            borderWidth: 2.5,
+            borderColor: "#2563eb",
+            backgroundColor: "rgba(37, 99, 235, 0.04)",
+            borderWidth: 2,
             fill: true,
-            tension: 0.25,
-            pointRadius: 2,
-            pointHoverRadius: 6,
-            pointBackgroundColor: "#6366f1",
+            tension: 0.1,
+            pointRadius: 0,
+            pointHoverRadius: 5,
+            pointBackgroundColor: "#2563eb",
           },
         ],
       },
@@ -353,24 +421,18 @@ if (typeof window !== "undefined") {
         },
         plugins: {
           legend: {
-            position: "top",
-            labels: {
-              color: "#94a3b8",
-              font: { family: "system-ui", size: 12, weight: "500" },
-              boxWidth: 14,
-              boxHeight: 14,
-              usePointStyle: true,
-              pointStyle: "circle",
-            },
+            display: false,
           },
           tooltip: {
-            backgroundColor: "#0f172a",
-            borderColor: "#334155",
+            backgroundColor: tooltipBg,
+            borderColor: tooltipBorder,
             borderWidth: 1,
             titleColor: "#f8fafc",
+            titleFont: { family: "JetBrains Mono, monospace", size: 11 },
             bodyColor: "#cbd5e1",
-            padding: 12,
-            boxPadding: 6,
+            bodyFont: { family: "JetBrains Mono, monospace", size: 12 },
+            padding: 10,
+            boxPadding: 4,
             usePointStyle: true,
             callbacks: {
               label: function (context) {
@@ -381,14 +443,14 @@ if (typeof window !== "undefined") {
         },
         scales: {
           x: {
-            grid: { color: "rgba(51, 65, 85, 0.3)" },
-            ticks: { color: "#64748b", font: { size: 11 } },
+            grid: { color: gridColor },
+            ticks: { color: "#64748b", font: { family: "JetBrains Mono, monospace", size: 10 } },
           },
           y: {
-            grid: { color: "rgba(51, 65, 85, 0.3)" },
+            grid: { color: gridColor },
             ticks: {
               color: "#64748b",
-              font: { size: 11 },
+              font: { family: "JetBrains Mono, monospace", size: 10 },
               callback: function (val) {
                 if (val >= 1000000) return `$${(val / 1000000).toFixed(1)}M`;
                 if (val >= 1000) return `$${(val / 1000).toFixed(0)}k`;
@@ -401,11 +463,48 @@ if (typeof window !== "undefined") {
     });
   }
 
+  function initThemeToggle() {
+    const themeToggle = document.getElementById("theme-toggle");
+    const sunIcon = document.getElementById("theme-icon-sun");
+    const moonIcon = document.getElementById("theme-icon-moon");
+
+    function updateIcons(isDark) {
+      if (sunIcon && moonIcon) {
+        if (isDark) {
+          sunIcon.classList.remove("hidden");
+          moonIcon.classList.add("hidden");
+        } else {
+          sunIcon.classList.add("hidden");
+          moonIcon.classList.remove("hidden");
+        }
+      }
+    }
+
+    const initialDark = document.documentElement.classList.contains("dark");
+    updateIcons(initialDark);
+
+    if (themeToggle) {
+      themeToggle.addEventListener("click", () => {
+        const willBeDark = !document.documentElement.classList.contains("dark");
+        if (willBeDark) {
+          document.documentElement.classList.add("dark");
+          localStorage.setItem("theme", "dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+          localStorage.setItem("theme", "light");
+        }
+        updateIcons(willBeDark);
+        updateChartTheme(willBeDark);
+      });
+    }
+  }
+
   function recalculateAndRender() {
     const params = getFormValues();
     const result = calculateComparison(params);
     updateHeroVerdict(result, params.horizonYears);
     updateMilestones(result);
+    updateBreakdown(result, params);
     updateChart(result);
     updateUrlQuery(params);
   }
@@ -465,6 +564,9 @@ if (typeof window !== "undefined") {
         });
       });
     }
+
+    // Initialize theme switcher
+    initThemeToggle();
 
     // Initial render
     recalculateAndRender();

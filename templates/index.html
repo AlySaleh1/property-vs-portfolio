@@ -1,10 +1,28 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-slate-950 text-slate-100">
+<html lang="en" class="h-full">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Property vs Portfolio | Rent & Invest vs. Buy Calculator</title>
-  <meta name="description" content="Interactive financial calculator comparing home buying vs renting and investing in the S&P 500 over a 5 to 30 year horizon.">
+  <title>Property vs Portfolio | Rent &amp; Invest vs. Buy Calculator</title>
+  <meta name="description" content="Analytical financial model comparing home buying vs renting and investing in the S&amp;P 500 over a 5 to 30 year horizon.">
+  
+  <!-- Anti-FOUC Theme Initialization -->
+  <script>
+    (function() {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+
+  <!-- Typography: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -12,73 +30,219 @@
       darkMode: 'class',
       theme: {
         extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace']
+          },
           colors: {
-            brand: {
-              50: '#f0fdf4',
-              500: '#10b981',
-              600: '#059669',
-            },
-            portfolio: {
-              50: '#eef2ff',
-              500: '#6366f1',
-              600: '#4f46e5',
+            surface: {
+              ground: '#f8fafc',
+              card: '#ffffff',
+              border: '#e2e8f0',
+              muted: '#64748b'
             }
           }
         }
       }
     }
   </script>
+
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
   <style>
-    /* Custom styling for sleek range sliders */
+    /* Typographic scale */
+    body {
+      font-size: 0.875rem; /* 14px */
+      line-height: 1.5;
+      color: #0f172a;
+      background-color: #f8fafc;
+    }
+    .dark body {
+      color: #f8fafc;
+      background-color: #080c14;
+    }
+    h1 {
+      font-size: 2rem; /* 32px */
+      line-height: 2.25rem;
+    }
+    h2 {
+      font-size: 1.5rem; /* 24px */
+      line-height: 2rem;
+    }
+    h3 {
+      font-size: 1.125rem; /* 18px */
+      line-height: 1.5rem;
+    }
+
+    /* Tabular numeric alignment */
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Selection */
+    ::selection {
+      background: #cbd5e1;
+      color: #0f172a;
+    }
+    .dark ::selection {
+      background: #334155;
+      color: #f8fafc;
+    }
+
+    /* Custom subtle scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .dark ::-webkit-scrollbar-track {
+      background: #080c14;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+    }
+    .dark ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+
+    /* Precision Range Sliders: Dual-theme tactile feel */
     input[type=range] {
       -webkit-appearance: none;
       background: transparent;
-    }
-    input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none;
       height: 18px;
-      width: 18px;
-      border-radius: 50%;
-      background: #38bdf8;
-      cursor: pointer;
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
-      border: 2px solid #0f172a;
-      margin-top: -6px;
     }
     input[type=range]::-webkit-slider-runnable-track {
       width: 100%;
-      height: 6px;
+      height: 4px;
       cursor: pointer;
-      background: #334155;
+      background: #e2e8f0;
       border-radius: 9999px;
+    }
+    .dark input[type=range]::-webkit-slider-runnable-track {
+      background: #1e293b;
+    }
+    input[type=range]::-moz-range-track {
+      width: 100%;
+      height: 4px;
+      cursor: pointer;
+      background: #e2e8f0;
+      border-radius: 9999px;
+    }
+    .dark input[type=range]::-moz-range-track {
+      background: #1e293b;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 14px;
+      width: 14px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 2px solid #0f172a;
+      cursor: grab;
+      margin-top: -5px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+      transition: transform 0.1s ease, background-color 0.1s ease;
+    }
+    .dark input[type=range]::-webkit-slider-thumb {
+      background: #f8fafc;
+      border: 2px solid #080c14;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+    input[type=range]::-webkit-slider-thumb:active {
+      cursor: grabbing;
+      border-color: #2563eb;
+      transform: scale(0.95);
+    }
+    input[type=range]::-moz-range-thumb {
+      height: 14px;
+      width: 14px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 2px solid #0f172a;
+      cursor: grab;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+      transition: transform 0.1s ease, background-color 0.1s ease;
+    }
+    .dark input[type=range]::-moz-range-thumb {
+      background: #f8fafc;
+      border: 2px solid #080c14;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+    input[type=range]::-moz-range-thumb:hover {
+      transform: scale(1.15);
+    }
+    input[type=range]::-moz-range-thumb:active {
+      cursor: grabbing;
+      border-color: #2563eb;
+      transform: scale(0.95);
     }
     input[type=range]:focus {
       outline: none;
     }
+
+    /* Number inputs: Clean tabular feel */
+    input[type=number] {
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
   </style>
 </head>
-<body class="h-full antialiased font-sans flex flex-col justify-between selection:bg-sky-500 selection:text-white">
+<body class="h-full antialiased font-sans flex flex-col justify-between bg-slate-50 dark:bg-[#080c14] text-slate-900 dark:text-slate-100 transition-colors duration-150">
 
   <!-- Header -->
-  <header class="border-b border-slate-800/80 bg-slate-900/60 backdrop-blur sticky top-0 z-30">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+  <header class="border-b border-slate-200 bg-white/90 dark:border-slate-800/80 dark:bg-[#080c14]/90 sticky top-0 z-30 transition-colors duration-150">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+      
+      <!-- Brand & Identity -->
       <div class="flex items-center space-x-3">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-indigo-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        <span class="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 dark:bg-slate-900 dark:border-slate-700/80 flex items-center justify-center text-slate-700 dark:text-slate-200">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
           </svg>
-        </div>
+        </span>
         <div>
-          <h1 class="text-base sm:text-lg font-bold tracking-tight text-white leading-tight">Property vs Portfolio</h1>
-          <p class="text-xs text-slate-400 hidden sm:block">Rent & Invest vs. Home Ownership Delta Model</p>
+          <h1 class="text-base sm:text-lg font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Property vs Portfolio</h1>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block">Buy Home vs. Rent &amp; Invest Net Worth Model</p>
         </div>
       </div>
       
-      <div class="flex items-center space-x-3">
-        <button id="share-btn" class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600 transition-all shadow-sm">
-          <svg class="w-3.5 h-3.5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <!-- Actions: Theme Toggle, Share -->
+      <div class="flex items-center space-x-2.5">
+
+        <!-- Light / Dark Theme Switcher -->
+        <button id="theme-toggle" type="button" aria-label="Toggle theme" title="Toggle Light / Dark Theme"
+          class="inline-flex items-center justify-center p-1.5 rounded-lg text-slate-600 hover:text-slate-900 bg-white hover:bg-slate-100 border border-slate-200 dark:text-slate-300 dark:hover:text-white dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-slate-700 transition shadow-sm">
+          <!-- Sun Icon (shown when dark) -->
+          <svg id="theme-icon-sun" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+          </svg>
+          <!-- Moon Icon (shown when light) -->
+          <svg id="theme-icon-moon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+          </svg>
+        </button>
+        
+        <button id="share-btn" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 hover:border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 dark:border-slate-700 dark:hover:border-slate-600 transition shadow-sm">
+          <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
           </svg>
           <span>Share Scenario</span>
@@ -88,41 +252,40 @@
   </header>
 
   <!-- Share Toast Notification -->
-  <div id="share-toast" class="fixed bottom-6 right-6 z-50 transition-opacity duration-300 opacity-0 pointer-events-none bg-sky-500 text-slate-950 font-semibold text-xs px-4 py-2.5 rounded-xl shadow-xl flex items-center space-x-2">
-    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <div id="share-toast" class="fixed bottom-6 right-6 z-50 transition-opacity duration-200 opacity-0 pointer-events-none bg-slate-900 dark:bg-slate-800 text-white font-medium text-xs px-4 py-2.5 rounded-lg border border-slate-700 shadow-xl flex items-center space-x-2">
+    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
     </svg>
-    <span>Shareable scenario link copied to clipboard!</span>
+    <span>Scenario link copied to clipboard</span>
   </div>
 
-  <!-- Main Content Layout -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+  <!-- Main Cockpit Layout -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-1">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       
       <!-- Left Column: Controls (5 Sliders + Horizon) -->
-      <section class="lg:col-span-5 bg-slate-900/70 border border-slate-800 rounded-3xl p-6 sm:p-7 shadow-xl backdrop-blur">
-        <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-800">
+      <section class="lg:col-span-5 bg-white dark:bg-[#0d131f] border border-slate-200 dark:border-slate-800 rounded-xl p-5 sm:p-6 shadow-sm transition-colors duration-150">
+        <div class="flex items-center justify-between pb-3.5 mb-5 border-b border-slate-200 dark:border-slate-800/80">
           <div>
-            <h2 class="text-base font-bold text-white">Simulation Variables</h2>
-            <p class="text-xs text-slate-400">Drag sliders to recalculate in real-time</p>
+            <h2 class="text-base sm:text-lg font-bold tracking-tight text-slate-900 dark:text-white">Simulation Parameters</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Synchronized sliders &amp; numeric inputs</p>
           </div>
-          <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-sky-500/10 text-sky-400 border border-sky-500/20">60 FPS Live</span>
         </div>
 
-        <div class="space-y-6">
+        <div class="space-y-5">
           
           <!-- 1. Home Price -->
           <div>
-            <div class="flex justify-between items-center mb-2">
-              <label for="slider-price" class="text-xs font-semibold uppercase tracking-wider text-slate-300">Target Home Price</label>
-              <div class="relative rounded-lg shadow-sm">
-                <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400 text-xs">$</span>
+            <div class="flex justify-between items-center mb-1.5">
+              <label for="input-price" class="text-xs font-medium text-slate-700 dark:text-slate-300">Target Home Price</label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400 font-mono text-xs">$</span>
                 <input type="number" id="input-price" value="{{ initial_params.home_price | int }}" min="100000" max="2500000" step="5000"
-                  class="w-32 bg-slate-950 border border-slate-700 rounded-lg pl-6 pr-2.5 py-1 text-right text-xs font-semibold text-white focus:outline-none focus:border-sky-500">
+                  class="w-28 bg-slate-50 dark:bg-[#080c14] border border-slate-300 dark:border-slate-700/80 rounded-md pl-6 pr-2.5 py-1 text-right font-mono text-xs font-semibold text-slate-900 dark:text-white tabular-nums focus:outline-none focus:border-blue-500 dark:focus:border-slate-400">
               </div>
             </div>
             <input type="range" id="slider-price" min="100000" max="2500000" step="5000" value="{{ initial_params.home_price | int }}" class="w-full">
-            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+            <div class="flex justify-between text-[10px] font-mono text-slate-500 dark:text-slate-400 mt-1 tabular-nums">
               <span>$100k</span>
               <span>$1.25M</span>
               <span>$2.5M</span>
@@ -131,17 +294,17 @@
 
           <!-- 2. Down Payment % -->
           <div>
-            <div class="flex justify-between items-center mb-2">
-              <label for="slider-down" class="text-xs font-semibold uppercase tracking-wider text-slate-300">Down Payment %</label>
-              <div class="relative rounded-lg shadow-sm">
+            <div class="flex justify-between items-center mb-1.5">
+              <label for="input-down" class="text-xs font-medium text-slate-700 dark:text-slate-300">Down Payment %</label>
+              <div class="relative">
                 <input type="number" id="input-down" value="{{ initial_params.down_payment_pct }}" min="3" max="50" step="1"
-                  class="w-24 bg-slate-950 border border-slate-700 rounded-lg pl-2.5 pr-6 py-1 text-right text-xs font-semibold text-white focus:outline-none focus:border-sky-500">
-                <span class="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none text-slate-400 text-xs">%</span>
+                  class="w-20 bg-slate-50 dark:bg-[#080c14] border border-slate-300 dark:border-slate-700/80 rounded-md pl-2 pr-5 py-1 text-right font-mono text-xs font-semibold text-slate-900 dark:text-white tabular-nums focus:outline-none focus:border-blue-500 dark:focus:border-slate-400">
+                <span class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none text-slate-400 font-mono text-xs">%</span>
               </div>
             </div>
             <input type="range" id="slider-down" min="3" max="50" step="1" value="{{ initial_params.down_payment_pct }}" class="w-full">
-            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
-              <span>3% (FHA/Min)</span>
+            <div class="flex justify-between text-[10px] font-mono text-slate-500 dark:text-slate-400 mt-1 tabular-nums">
+              <span>3% (Min)</span>
               <span>20% (Standard)</span>
               <span>50%</span>
             </div>
@@ -149,16 +312,16 @@
 
           <!-- 3. Mortgage Interest Rate -->
           <div>
-            <div class="flex justify-between items-center mb-2">
-              <label for="slider-rate" class="text-xs font-semibold uppercase tracking-wider text-slate-300">30-Year Mortgage Rate</label>
-              <div class="relative rounded-lg shadow-sm">
+            <div class="flex justify-between items-center mb-1.5">
+              <label for="input-rate" class="text-xs font-medium text-slate-700 dark:text-slate-300">30-Year Mortgage Rate</label>
+              <div class="relative">
                 <input type="number" id="input-rate" value="{{ initial_params.mortgage_rate }}" min="2.0" max="12.0" step="0.1"
-                  class="w-24 bg-slate-950 border border-slate-700 rounded-lg pl-2.5 pr-6 py-1 text-right text-xs font-semibold text-white focus:outline-none focus:border-sky-500">
-                <span class="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none text-slate-400 text-xs">%</span>
+                  class="w-20 bg-slate-50 dark:bg-[#080c14] border border-slate-300 dark:border-slate-700/80 rounded-md pl-2 pr-5 py-1 text-right font-mono text-xs font-semibold text-slate-900 dark:text-white tabular-nums focus:outline-none focus:border-blue-500 dark:focus:border-slate-400">
+                <span class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none text-slate-400 font-mono text-xs">%</span>
               </div>
             </div>
             <input type="range" id="slider-rate" min="2.0" max="12.0" step="0.1" value="{{ initial_params.mortgage_rate }}" class="w-full">
-            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+            <div class="flex justify-between text-[10px] font-mono text-slate-500 dark:text-slate-400 mt-1 tabular-nums">
               <span>2.0%</span>
               <span>6.5% (Avg)</span>
               <span>12.0%</span>
@@ -167,16 +330,16 @@
 
           <!-- 4. Initial Monthly Rent -->
           <div>
-            <div class="flex justify-between items-center mb-2">
-              <label for="slider-rent" class="text-xs font-semibold uppercase tracking-wider text-slate-300">Initial Monthly Rent</label>
-              <div class="relative rounded-lg shadow-sm">
-                <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400 text-xs">$</span>
+            <div class="flex justify-between items-center mb-1.5">
+              <label for="input-rent" class="text-xs font-medium text-slate-700 dark:text-slate-300">Initial Monthly Rent</label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400 font-mono text-xs">$</span>
                 <input type="number" id="input-rent" value="{{ initial_params.initial_rent | int }}" min="500" max="15000" step="50"
-                  class="w-28 bg-slate-950 border border-slate-700 rounded-lg pl-6 pr-2.5 py-1 text-right text-xs font-semibold text-white focus:outline-none focus:border-sky-500">
+                  class="w-24 bg-slate-50 dark:bg-[#080c14] border border-slate-300 dark:border-slate-700/80 rounded-md pl-6 pr-2.5 py-1 text-right font-mono text-xs font-semibold text-slate-900 dark:text-white tabular-nums focus:outline-none focus:border-blue-500 dark:focus:border-slate-400">
               </div>
             </div>
             <input type="range" id="slider-rent" min="500" max="15000" step="50" value="{{ initial_params.initial_rent | int }}" class="w-full">
-            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+            <div class="flex justify-between text-[10px] font-mono text-slate-500 dark:text-slate-400 mt-1 tabular-nums">
               <span>$500/mo</span>
               <span>$2,200/mo</span>
               <span>$15,000/mo</span>
@@ -185,16 +348,16 @@
 
           <!-- 5. Expected S&P 500 Return -->
           <div>
-            <div class="flex justify-between items-center mb-2">
-              <label for="slider-sp" class="text-xs font-semibold uppercase tracking-wider text-slate-300">Expected S&P 500 Return</label>
-              <div class="relative rounded-lg shadow-sm">
+            <div class="flex justify-between items-center mb-1.5">
+              <label for="input-sp" class="text-xs font-medium text-slate-700 dark:text-slate-300">Expected S&amp;P 500 Return</label>
+              <div class="relative">
                 <input type="number" id="input-sp" value="{{ initial_params.sp500_return }}" min="2.0" max="15.0" step="0.1"
-                  class="w-24 bg-slate-950 border border-slate-700 rounded-lg pl-2.5 pr-6 py-1 text-right text-xs font-semibold text-white focus:outline-none focus:border-sky-500">
-                <span class="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none text-slate-400 text-xs">%</span>
+                  class="w-20 bg-slate-50 dark:bg-[#080c14] border border-slate-300 dark:border-slate-700/80 rounded-md pl-2 pr-5 py-1 text-right font-mono text-xs font-semibold text-slate-900 dark:text-white tabular-nums focus:outline-none focus:border-blue-500 dark:focus:border-slate-400">
+                <span class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none text-slate-400 font-mono text-xs">%</span>
               </div>
             </div>
             <input type="range" id="slider-sp" min="2.0" max="15.0" step="0.1" value="{{ initial_params.sp500_return }}" class="w-full">
-            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+            <div class="flex justify-between text-[10px] font-mono text-slate-500 dark:text-slate-400 mt-1 tabular-nums">
               <span>2.0%</span>
               <span>8.0% (Avg)</span>
               <span>15.0%</span>
@@ -202,21 +365,21 @@
           </div>
 
           <!-- Horizon Selector & Presets -->
-          <div class="pt-4 border-t border-slate-800">
+          <div class="pt-4 border-t border-slate-200 dark:border-slate-800">
             <div class="flex justify-between items-center mb-2">
-              <label for="slider-horizon" class="text-xs font-semibold uppercase tracking-wider text-slate-300">Timeline Horizon</label>
-              <div class="flex items-center space-x-2">
-                <button type="button" id="preset-5yr" class="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">5 Yr Move</button>
-                <button type="button" id="preset-30yr" class="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">30 Yr Horizon</button>
-                <div class="relative rounded-lg shadow-sm">
+              <label for="input-horizon" class="text-xs font-medium text-slate-700 dark:text-slate-300">Timeline Horizon</label>
+              <div class="flex items-center space-x-1.5">
+                <button type="button" id="preset-5yr" class="px-2 py-0.5 rounded text-[11px] font-mono bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 transition">5Y</button>
+                <button type="button" id="preset-30yr" class="px-2 py-0.5 rounded text-[11px] font-mono bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 transition">30Y</button>
+                <div class="relative flex items-center">
                   <input type="number" id="input-horizon" value="{{ initial_params.horizon_years }}" min="5" max="30" step="1"
-                    class="w-16 bg-slate-950 border border-slate-700 rounded-lg px-2 py-1 text-right text-xs font-semibold text-white focus:outline-none focus:border-sky-500">
-                  <span class="text-xs text-slate-400 ml-1">yr</span>
+                    class="w-14 bg-slate-50 dark:bg-[#080c14] border border-slate-300 dark:border-slate-700/80 rounded-md px-1.5 py-0.5 text-right font-mono text-xs font-semibold text-slate-900 dark:text-white tabular-nums focus:outline-none focus:border-blue-500 dark:focus:border-slate-400">
+                  <span class="text-[11px] font-mono text-slate-400 ml-1">yr</span>
                 </div>
               </div>
             </div>
             <input type="range" id="slider-horizon" min="5" max="30" step="1" value="{{ initial_params.horizon_years }}" class="w-full">
-            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+            <div class="flex justify-between text-[10px] font-mono text-slate-500 dark:text-slate-400 mt-1 tabular-nums">
               <span>5 Years</span>
               <span>15 Years</span>
               <span>30 Years</span>
@@ -225,31 +388,46 @@
 
         </div>
 
-        <!-- Assumptions Footer -->
-        <div class="mt-8 pt-5 border-t border-slate-800/80 bg-slate-950/40 -mx-6 -mb-6 p-6 rounded-b-3xl text-[11px] text-slate-400 leading-relaxed">
-          <div class="flex items-center space-x-2 text-slate-300 font-semibold mb-1">
-            <svg class="w-3.5 h-3.5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <span>Underlying Market Assumptions</span>
+        <!-- Analytical Spec Matrix (Market Constants) -->
+        <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400">
+          <div class="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Underlying Market Constants</div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-y-2 gap-x-3 font-mono text-[10px] py-2 border-y border-slate-200 dark:border-slate-800/80 text-slate-600 dark:text-slate-400">
+            <div>
+              <span>Appreciation:</span> <strong class="text-slate-900 dark:text-slate-200">3.5%</strong>
+            </div>
+            <div>
+              <span>Rent Inflation:</span> <strong class="text-slate-900 dark:text-slate-200">3.0%</strong>
+            </div>
+            <div>
+              <span>Tax &amp; Ins:</span> <strong class="text-slate-900 dark:text-slate-200">1.5%</strong>
+            </div>
+            <div>
+              <span>Maintenance:</span> <strong class="text-slate-900 dark:text-slate-200">1.0%</strong>
+            </div>
+            <div>
+              <span>Buyer Closing:</span> <strong class="text-slate-900 dark:text-slate-200">3.0%</strong>
+            </div>
+            <div>
+              <span>Seller Exit:</span> <strong class="text-slate-900 dark:text-slate-200">6.0%</strong>
+            </div>
           </div>
-          <p>
-            Appreciation: <strong>3.5%/yr</strong> &bull; Rent Inflation: <strong>3.0%/yr</strong> &bull; Tax & Ins: <strong>1.5%/yr</strong> &bull; Maintenance: <strong>1.0%/yr</strong> &bull; Buyer Closing: <strong>3.0%</strong> &bull; Seller Exit Fee: <strong>6.0%</strong>. Pre-tax nominal comparison.
-          </p>
+          <div class="text-[10px] text-slate-500 dark:text-slate-400 mt-2">
+            Nominal pre-tax modeling. Monthly housing cash flow deltas compound in index funds.
+          </div>
         </div>
       </section>
 
       <!-- Right Column: Results, Verdict, Trajectory Graph & Milestones -->
-      <section class="lg:col-span-7 space-y-6">
+      <section class="lg:col-span-7 space-y-5">
         
         <!-- Hero Verdict Banner -->
-        <div id="verdict-banner" class="p-6 rounded-3xl border transition-all duration-300 bg-emerald-950/30 border-emerald-500/30 text-emerald-100 shadow-xl shadow-emerald-950/20">
+        <div id="verdict-banner" class="p-5 sm:p-6 rounded-xl border transition-all duration-200 bg-white border-slate-200 dark:bg-[#0d131f] dark:border-slate-800 text-slate-900 dark:text-slate-100 shadow-sm">
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <div id="verdict-title" class="text-sm font-semibold tracking-wide uppercase text-emerald-400">
-                Buying Wins
+              <div id="verdict-title" class="text-xs uppercase font-mono tracking-wider font-semibold text-slate-500 dark:text-slate-400">
+                Evaluating Trajectory
               </div>
-              <div id="verdict-amount" class="text-4xl sm:text-5xl font-extrabold tracking-tight text-emerald-400 mt-1">
+              <div id="verdict-amount" class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-mono tracking-tight text-slate-900 dark:text-white tabular-nums mt-1">
                 +$0
               </div>
             </div>
@@ -257,32 +435,70 @@
               <!-- Rendered via JS -->
             </div>
           </div>
-          <p id="verdict-desc" class="text-xs sm:text-sm text-slate-300 mt-3 leading-relaxed">
+          <p id="verdict-desc" class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-2.5 leading-relaxed">
             Calculating trajectory...
           </p>
         </div>
 
         <!-- Trajectory Chart Card -->
-        <div class="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 sm:p-7 shadow-xl backdrop-blur">
-          <div class="flex items-center justify-between mb-4">
+        <div class="bg-white dark:bg-[#0d131f] border border-slate-200 dark:border-slate-800 rounded-xl p-5 sm:p-6 shadow-sm transition-colors duration-150">
+          <div class="flex items-center justify-between mb-3">
             <div>
-              <h3 class="text-sm font-bold text-white">Net Worth Trajectory</h3>
-              <p class="text-xs text-slate-400">Liquidated Home Equity vs. Compounded S&P 500 Portfolio</p>
+              <h3 class="text-base sm:text-lg font-bold tracking-tight text-slate-900 dark:text-white">Net Worth Trajectory</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Liquidated Home Equity vs. Compounded S&amp;P 500 Portfolio</p>
+            </div>
+            <div class="flex items-center space-x-3 text-xs font-mono">
+              <span class="inline-flex items-center space-x-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                <span class="text-slate-700 dark:text-slate-300">Home Equity</span>
+              </span>
+              <span class="inline-flex items-center space-x-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+                <span class="text-slate-700 dark:text-slate-300">S&amp;P Portfolio</span>
+              </span>
             </div>
           </div>
-          <div class="relative h-72 sm:h-80 w-full">
+          <div class="relative h-64 sm:h-72 w-full">
             <canvas id="trajectory-chart"></canvas>
           </div>
         </div>
 
         <!-- Milestone Snapshots -->
         <div>
-          <div class="flex items-center justify-between mb-3 px-1">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Key Milestone Snapshots</h3>
-            <span class="text-[11px] text-slate-400">Net proceeds after transaction friction</span>
+          <div class="flex items-center justify-between mb-2.5 px-0.5">
+            <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono">Milestone Snapshots</h3>
+            <span class="text-[11px] font-mono text-slate-500 dark:text-slate-400">Net proceeds after transaction friction</span>
           </div>
-          <div id="milestones-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div id="milestones-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
             <!-- Rendered dynamically via JS -->
+          </div>
+        </div>
+
+        <!-- Friction & Cost Breakdown Ledger (Flat structural rows) -->
+        <div class="bg-white dark:bg-[#0d131f] border border-slate-200 dark:border-slate-800 rounded-xl p-4 sm:p-5 text-xs shadow-sm transition-colors duration-150">
+          <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono mb-3">
+            Transaction Friction &amp; Cash Flow Ledger
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-slate-200 dark:divide-slate-800/80 pt-1">
+            
+            <div class="pb-3 sm:pb-0 sm:pr-4">
+              <div class="text-[11px] text-slate-500 dark:text-slate-400 mb-1">Upfront Cash Outlay</div>
+              <div class="text-sm font-bold font-mono text-slate-900 dark:text-white tabular-nums" id="breakdown-outlay">$0</div>
+              <div class="text-[10px] font-mono text-slate-500 dark:text-slate-400 mt-1" id="breakdown-outlay-sub">Down payment + 3% buyer fees</div>
+            </div>
+
+            <div class="py-3 sm:py-0 sm:px-4">
+              <div class="text-[11px] text-slate-500 dark:text-slate-400 mb-1">Year 1 Monthly Costs</div>
+              <div class="text-sm font-bold font-mono text-slate-900 dark:text-white tabular-nums" id="breakdown-monthly">$0 vs $0</div>
+              <div class="text-[10px] font-mono text-slate-500 dark:text-slate-400 mt-1" id="breakdown-monthly-sub">Buy P&amp;I + Escrow vs Rent</div>
+            </div>
+
+            <div class="pt-3 sm:pt-0 sm:pl-4">
+              <div class="text-[11px] text-slate-500 dark:text-slate-400 mb-1">Exit Selling Friction</div>
+              <div class="text-sm font-bold font-mono text-amber-600 dark:text-amber-400 tabular-nums" id="breakdown-exit">$0</div>
+              <div class="text-[10px] font-mono text-slate-500 dark:text-slate-400 mt-1" id="breakdown-exit-sub">6% broker &amp; transfer fees</div>
+            </div>
+
           </div>
         </div>
 
@@ -291,10 +507,10 @@
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="border-t border-slate-800/80 bg-slate-900/30 py-5 text-center text-xs text-slate-400">
+  <!-- Clean Minimal Footer -->
+  <footer class="border-t border-slate-200 bg-white text-slate-500 dark:border-slate-800/80 dark:bg-[#080c14] dark:text-slate-400 py-4 text-center text-xs font-mono transition-colors duration-150">
     <div class="max-w-7xl mx-auto px-4">
-      Property vs Portfolio &bull; Open-source financial modeling engine &bull; Zero external cookies or tracking
+      Property vs Portfolio
     </div>
   </footer>
 

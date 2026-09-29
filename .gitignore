@@ -24,3 +24,11 @@ htmlcov/
 
 # Vercel
 .vercel
+
+# Agent files & artifacts
+.agent/
+.agents/
+.impeccable/
+skills-lock.json
+DESIGN.md
+PRODUCT.md
