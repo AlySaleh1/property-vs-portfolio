@@ -54,6 +54,7 @@ def parse_params(source: dict) -> dict:
 
 
 @app.route("/", methods=["GET"])
+@app.route("/api/index.py", methods=["GET"])
 def index():
     """Renders the single-page calculator pre-hydrated with URL query parameters."""
     params = parse_params(request.args)
